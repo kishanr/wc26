@@ -1,0 +1,257 @@
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+@import "@fontsource/outfit/500.css";
+@import "@fontsource/outfit/600.css";
+@import "@fontsource/outfit/700.css";
+@import "@fontsource/outfit/800.css";
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source "../**/*.blade.php";
+@source "../**/*.js";
+@source "../**/*.vue";
+
+/* ============================================
+   WC26 DESIGN SYSTEM - Dark Mode Premium
+   ============================================ */
+
+@theme {
+    /* Typography */
+    --font-sans: 'Inter', 'Outfit', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Outfit', 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+    /* WC26 Color Palette */
+    --color-wc-dark: #0a0e1a;
+    --color-wc-darker: #050810;
+    --color-wc-card: #111827;
+    --color-wc-border: #1f2937;
+
+    /* Neon Accents */
+    --color-neon-cyan: #00f5d4;
+    --color-neon-magenta: #ff006e;
+    --color-neon-yellow: #ffc300;
+    --color-neon-blue: #3a86ff;
+    --color-neon-purple: #8338ec;
+
+    /* Status Colors */
+    --color-live: #ef4444;
+    --color-upcoming: #22c55e;
+    --color-finished: #6b7280;
+
+    /* Glass Effect */
+    --glass-bg: rgba(17, 24, 39, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+/* Global Styles */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: linear-gradient(135deg, var(--color-wc-darker) 0%, var(--color-wc-dark) 100%);
+    min-height: 100vh;
+    color: #f9fafb;
+    font-family: var(--font-sans);
+}
+
+/* Glass Card Effect */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 1rem;
+}
+
+/* Neon Glow Effects */
+.glow-cyan {
+    box-shadow: 0 0 20px rgba(0, 245, 212, 0.3);
+}
+
+.glow-magenta {
+    box-shadow: 0 0 20px rgba(255, 0, 110, 0.3);
+}
+
+.glow-yellow {
+    box-shadow: 0 0 20px rgba(255, 195, 0, 0.3);
+}
+
+/* Text Gradient */
+.text-gradient {
+    background: linear-gradient(135deg, var(--color-neon-cyan), var(--color-neon-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Match Status Badges */
+.badge-live {
+    background: var(--color-live);
+    animation: pulse-live 2s infinite;
+}
+
+.badge-upcoming {
+    background: var(--color-upcoming);
+}
+
+.badge-finished {
+    background: var(--color-finished);
+}
+
+@keyframes pulse-live {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* Button Styles */
+.btn-primary {
+    background: linear-gradient(135deg, var(--color-neon-cyan), var(--color-neon-blue));
+    color: #0a0e1a;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 245, 212, 0.4);
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 2px solid var(--color-neon-cyan);
+    color: var(--color-neon-cyan);
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: var(--color-neon-cyan);
+    color: #0a0e1a;
+}
+
+/* Match Card Hover */
+.match-card {
+    transition: all 0.3s ease;
+}
+
+.match-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-neon-cyan);
+    box-shadow: 0 8px 30px rgba(0, 245, 212, 0.15);
+}
+
+/* Team Flag */
+.team-flag {
+    width: 3rem;
+    height: 2rem;
+    object-fit: cover;
+    border-radius: 0.25rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Score Display */
+.score-display {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+}
+
+/* Prediction Slider */
+.prediction-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: var(--color-wc-border);
+}
+
+.prediction-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--color-neon-cyan);
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0, 245, 212, 0.5);
+}
+
+/* Countdown Timer */
+.countdown {
+    font-family: var(--font-display);
+    font-variant-numeric: tabular-nums;
+}
+
+/* Mobile Navigation */
+.mobile-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--glass-border);
+    z-index: 50;
+}
+
+/* Loading Skeleton */
+.skeleton {
+    background: linear-gradient(90deg, var(--color-wc-card) 25%, var(--color-wc-border) 50%, var(--color-wc-card) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-wc-darker);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-wc-border);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-neon-cyan);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}

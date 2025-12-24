@@ -1,0 +1,292 @@
+<div x-data="matchDashboard({{ Js::from($allMatches) }})" 
+     x-on:global-search.window="search = $event.detail"
+     class="min-h-screen bg-[#050810]">
+    <!-- Hero Header -->
+    <header class="relative pt-12 pb-10 overflow-hidden border-b border-white/5">
+        <div class="absolute inset-0 bg-gradient-to-br from-[#00f5d4]/5 via-transparent to-[#3a86ff]/5"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <h1 class="text-4xl md:text-6xl font-black text-white mb-2 tracking-tight">WC26 EXPLORER</h1>
+            <p class="text-gray-400 text-sm md:text-base font-medium">Noord-Amerika • 11 Juni - 19 Juli 2026</p>
+            
+            <div x-show="!search" x-transition class="mt-8 flex flex-wrap justify-center gap-4 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-600">
+                <span class="opacity-40">Snelzoeken:</span>
+                <button @click="search = '16 juni'; window.dispatchEvent(new CustomEvent('global-search', { detail: '16 juni' }))" class="hover:text-[#00f5d4] transition-colors">16 Juni</button>
+                <button @click="search = 'Texas'; window.dispatchEvent(new CustomEvent('global-search', { detail: 'Texas' }))" class="hover:text-[#00f5d4] transition-colors">Texas</button>
+                <button @click="search = 'Miami'; window.dispatchEvent(new CustomEvent('global-search', { detail: 'Miami' }))" class="hover:text-[#00f5d4] transition-colors">Miami</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="dashboard-layout">
+            <!-- Left Sidebar: Filters -->
+            <aside class="space-y-8 sticky top-24 hidden lg:block">
+                <div>
+                    <h3 class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4">Toernooi Fases</h3>
+                    <div class="flex flex-col gap-2">
+                        <template x-for="s in stages" :key="s.id">
+                            <button 
+                                @click="setStage(s.id)" 
+                                class="filter-chip text-left"
+                                :class="stage === s.id ? 'active' : ''"
+                                x-text="s.label"
+                            ></button>
+                        </template>
+                    </div>
+                </div>
+
+                <div x-show="stage === 'group' || stage === 'all'" x-transition>
+                    <h3 class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4">Groepen</h3>
+                    <div class="grid grid-cols-4 gap-2">
+                        <template x-for="g in groups" :key="g">
+                            <button 
+                                @click="setGroup(g)" 
+                                class="w-full aspect-square flex items-center justify-center text-[10px] font-black rounded-lg transition-all"
+                                :class="group === g ? 'bg-[#3a86ff] text-white shadow-lg' : 'bg-white/5 text-gray-500 hover:bg-white/10'"
+                                x-text="g"
+                            ></button>
+                        </template>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Mobile Horizontal Filters -->
+            <div class="lg:hidden mb-8 flex flex-col gap-6">
+                <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2">
+                    <template x-for="s in stages" :key="s.id">
+                        <button 
+                            @click="setStage(s.id)" 
+                            class="filter-chip whitespace-nowrap"
+                            :class="stage === s.id ? 'active' : ''"
+                            x-text="s.label"
+                        ></button>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Matches Feed -->
+            <div class="min-h-[600px]">
+                <template x-for="(group, dateKey) in groupedMatches" :key="dateKey">
+                    <div class="mb-10">
+                        <div class="date-pill mb-6">
+                            <span class="text-[#00f5d4] uppercase" x-text="formatDay(dateKey)"></span>
+                            <span class="mx-2 text-gray-700">|</span>
+                            <span class="text-white" x-text="formatDateFull(dateKey)"></span>
+                        </div>
+
+                        <div class="grid gap-4 md:grid-cols-2">
+                            <template x-for="match in group" :key="match.id">
+                                <a :href="'/match/' + match.slug" class="match-card-glass block p-4 group">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <span class="text-[9px] font-black text-gray-500 uppercase tracking-widest" x-text="match.stage_name"></span>
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="w-1 h-1 rounded-full bg-[#00f5d4]"></span>
+                                            <span class="text-[9px] font-black text-white/40 uppercase tracking-widest" x-text="match.stadium ? match.stadium.city : 'TBD'"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center justify-between gap-4">
+                                        <!-- Home Team -->
+                                        <div class="flex items-center gap-3 flex-1 min-w-0">
+                                            <div class="w-10 h-7 rounded bg-white/5 overflow-hidden flex-shrink-0">
+                                                <template x-if="match.home_team.flag_url">
+                                                    <img :src="match.home_team.flag_url" class="w-full h-full object-cover">
+                                                </template>
+                                            </div>
+                                            <span class="text-sm font-bold text-white truncate" x-text="match.home_team.display_name"></span>
+                                        </div>
+
+                                        <!-- Score / Time -->
+                                        <div class="flex-shrink-0 flex flex-col items-center justify-center min-w-[80px]">
+                                            <template x-if="match.status === 'finished' || match.status === 'live'">
+                                                <div class="text-xl font-black text-white tabular-nums flex items-center gap-2">
+                                                    <span x-text="match.home_score"></span>
+                                                    <span class="text-white/20 text-sm">:</span>
+                                                    <span x-text="match.away_score"></span>
+                                                </div>
+                                            </template>
+                                            <template x-if="match.status !== 'finished' && match.status !== 'live'">
+                                                <div class="px-3 py-1 bg-white/5 rounded-lg border border-white/5 text-xs font-black text-[#00f5d4] tabular-nums" x-text="formatTime(match.start_time)"></div>
+                                            </template>
+                                        </div>
+
+                                        <!-- Away Team -->
+                                        <div class="flex items-center gap-3 flex-1 min-w-0 justify-end">
+                                            <span class="text-sm font-bold text-white truncate" x-text="match.away_team.display_name"></span>
+                                            <div class="w-10 h-7 rounded bg-white/5 overflow-hidden flex-shrink-0">
+                                                <template x-if="match.away_team.flag_url">
+                                                    <img :src="match.away_team.flag_url" class="w-full h-full object-cover">
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Mobile Stadium Info (Secondary) -->
+                                    <div class="mt-4 flex items-center justify-between text-[10px] text-gray-500 font-bold uppercase tracking-wider">
+                                        <span x-text="match.group ? 'Groep ' + match.group : ''"></span>
+                                        <template x-if="match.status_badge.text">
+                                            <span :class="match.status_badge.class + ' px-2 py-0.5 rounded'" x-text="match.status_badge.text"></span>
+                                        </template>
+                                    </div>
+                                </a>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- No Results -->
+                <div x-show="Object.keys(groupedMatches).length === 0" class="flex flex-col items-center justify-center py-20 text-center">
+                    <div class="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mb-6">
+                        <svg class="w-10 h-10 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Geen resultaten gevonden</h3>
+                    <p class="text-gray-500 text-sm max-w-xs">We konden geen wedstrijden vinden die voldoen aan je zoekopdracht "<span class="text-white" x-text="search"></span>".</p>
+                    <button @click="search = ''; stage = 'all'; group = 'all'" class="mt-8 px-6 py-2 bg-[#00f5d4] text-[#0a0e1a] font-bold rounded-lg hover:scale-105 transition-transform text-sm">Filters wissen</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+<style>
+    /* CRITICAL FIX: Override dashboard layout */
+    .dashboard-layout {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        gap: 3rem;
+        align-items: start;
+    }
+    
+    @media (max-width: 1024px) {
+        .dashboard-layout {
+            display: block;
+        }
+    }
+    
+    /* Original search capsule styles */
+    .search-capsule {
+        display: flex;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 9999px;
+        padding: 4px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .search-capsule:focus-within {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: var(--color-neon-cyan);
+        box-shadow: 0 0 30px rgba(0, 245, 212, 0.1);
+    }
+    .search-icon-wrapper {
+        padding-left: 1.25rem;
+        padding-right: 0.75rem;
+        color: #4b5563;
+    }
+    .search-input-field {
+        flex: 1;
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 0.875rem;
+        font-weight: 500;
+        padding: 0.6rem 0;
+    }
+    .search-input-field:focus { outline: none; border: none; box-shadow: none; --tw-ring-color: transparent; }
+    .clear-search-btn {
+        padding: 0.5rem;
+        margin-right: 0.5rem;
+        color: #4b5563;
+        border-radius: 9999px;
+        transition: all 0.2s;
+    }
+    .clear-search-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+</style>
+
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('matchDashboard', (matches) => ({
+            matches: matches,
+            stage: 'all',
+            group: 'all',
+            search: '',
+            stages: [
+                { id: 'all', label: 'Alle Fases' },
+                { id: 'group', label: 'Groepsfase' },
+                { id: 'round_of_32', label: 'R32' },
+                { id: 'round_of_16', label: 'R16' },
+                { id: 'quarter_final', label: 'Kwartfinales' },
+                { id: 'semi_final', label: 'Halve finales' },
+                { id: 'final', label: 'Finale' },
+            ],
+            groups: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'],
+
+            setStage(id) {
+                this.stage = id;
+                if (id !== 'group' && id !== 'all') this.group = 'all';
+            },
+            setGroup(g) {
+                this.group = g;
+                this.stage = 'group';
+            },
+            get filteredMatches() {
+                const q = this.search.toLowerCase().trim();
+                const dutchMap = {
+                    'januari': 'january', 'februari': 'february', 'maart': 'march',
+                    'mei': 'may', 'juni': 'june', 'juli': 'july', 
+                    'oktober': 'october'
+                };
+                let englishQ = q;
+                Object.keys(dutchMap).forEach(k => englishQ = englishQ.replace(k, dutchMap[k]));
+
+                return this.matches.filter(m => {
+                    const sMatch = this.stage === 'all' || m.stage === this.stage;
+                    const gMatch = this.group === 'all' || m.group === this.group;
+                    if (this.group !== 'all' && !gMatch) return false;
+                    if (!sMatch) return false;
+
+                    if (!q) return true;
+
+                    const data = [
+                        m.home_team.display_name,
+                        m.away_team.display_name,
+                        m.stadium?.city || '',
+                        m.stadium?.region || '',
+                        m.search_date
+                    ].join(' ').toLowerCase();
+
+                    return data.includes(q) || data.includes(englishQ);
+                });
+            },
+            get groupedMatches() {
+                const res = {};
+                this.filteredMatches.forEach(m => {
+                    const d = new Date(m.start_time);
+                    const k = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+                    if (!res[k]) res[k] = [];
+                    res[k].push(m);
+                });
+                const sorted = Object.keys(res).sort();
+                const output = {};
+                sorted.forEach(k => output[k] = res[k]);
+                return output;
+            },
+            formatDay(k) {
+                const d = new Date(k + 'T12:00:00');
+                return d.toLocaleDateString('nl-NL', { weekday: 'long' });
+            },
+            formatDateFull(k) {
+                const d = new Date(k + 'T12:00:00');
+                return d.toLocaleDateString('nl-NL', { month: 'long', day: 'numeric', year: 'numeric' });
+            },
+            formatTime(s) {
+                const d = new Date(s);
+                return d.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+            }
+        }));
+    });
+</script>
+</div>
