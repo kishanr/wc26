@@ -92,6 +92,159 @@
         </div>
     </div>
 
+    <!-- Team Comparison Section -->
+    <div class="grid md:grid-cols-2 gap-6 mb-6">
+        <!-- Home Team Details -->
+        <div class="glass-card p-6">
+            <div class="flex items-center gap-3 mb-6 pb-4 border-b border-white/10">
+                <div class="w-12 h-8 rounded-lg bg-white/5 overflow-hidden flex-shrink-0">
+                    @if($game->homeTeam->flag_url)
+                        <img src="{{ $game->homeTeam->flag_url }}" alt="{{ $game->homeTeam->display_name }}" class="w-full h-full object-cover">
+                    @endif
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-xl font-black text-white">{{ $game->homeTeam->display_name }}</h3>
+                    <p class="text-xs text-gray-500 uppercase tracking-widest">{{ $game->homeTeam->confederation ?? 'N/A' }}</p>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <!-- FIFA Ranking -->
+                @if($game->homeTeam->fifa_ranking)
+                    <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#ffc300] to-[#ff006e] flex items-center justify-center">
+                                <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                            </div>
+                            <span class="text-sm font-bold text-gray-400">FIFA Ranking</span>
+                        </div>
+                        <span class="text-2xl font-black text-white">#{{ $game->homeTeam->fifa_ranking }}</span>
+                    </div>
+                @endif
+
+                <!-- Coach -->
+                @if($game->homeTeam->coach)
+                    <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
+                                <svg class="w-4 h-4 text-[#00f5d4]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </div>
+                            <span class="text-sm font-bold text-gray-400">Coach</span>
+                        </div>
+                        <span class="text-sm font-bold text-white">{{ $game->homeTeam->coach }}</span>
+                    </div>
+                @endif
+
+                <!-- Captain -->
+                @if($game->homeTeam->captain)
+                    <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
+                                <span class="text-sm">⭐</span>
+                            </div>
+                            <span class="text-sm font-bold text-gray-400">Captain</span>
+                        </div>
+                        <span class="text-sm font-bold text-white">{{ $game->homeTeam->captain }}</span>
+                    </div>
+                @endif
+
+                <!-- World Cup History -->
+                <div class="pt-4 border-t border-white/10">
+                    <div class="text-xs font-black text-gray-500 uppercase tracking-widest mb-3">World Cup History</div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="text-center p-3 rounded-lg bg-gradient-to-br from-[#ffc300]/10 to-transparent border border-[#ffc300]/20">
+                            <div class="text-2xl font-black text-[#ffc300]">{{ $game->homeTeam->world_cup_titles ?? 0 }}</div>
+                            <div class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mt-1">Titles</div>
+                        </div>
+                        <div class="text-center p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div class="text-2xl font-black text-white">{{ $game->homeTeam->world_cup_appearances ?? 0 }}</div>
+                            <div class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mt-1">Appearances</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Away Team Details -->
+        <div class="glass-card p-6">
+            <div class="flex items-center gap-3 mb-6 pb-4 border-b border-white/10">
+                <div class="w-12 h-8 rounded-lg bg-white/5 overflow-hidden flex-shrink-0">
+                    @if($game->awayTeam->flag_url)
+                        <img src="{{ $game->awayTeam->flag_url }}" alt="{{ $game->awayTeam->display_name }}" class="w-full h-full object-cover">
+                    @endif
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-xl font-black text-white">{{ $game->awayTeam->display_name }}</h3>
+                    <p class="text-xs text-gray-500 uppercase tracking-widest">{{ $game->awayTeam->confederation ?? 'N/A' }}</p>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <!-- FIFA Ranking -->
+                @if($game->awayTeam->fifa_ranking)
+                    <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#ffc300] to-[#ff006e] flex items-center justify-center">
+                                <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                            </div>
+                            <span class="text-sm font-bold text-gray-400">FIFA Ranking</span>
+                        </div>
+                        <span class="text-2xl font-black text-white">#{{ $game->awayTeam->fifa_ranking }}</span>
+                    </div>
+                @endif
+
+                <!-- Coach -->
+                @if($game->awayTeam->coach)
+                    <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
+                                <svg class="w-4 h-4 text-[#00f5d4]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </div>
+                            <span class="text-sm font-bold text-gray-400">Coach</span>
+                        </div>
+                        <span class="text-sm font-bold text-white">{{ $game->awayTeam->coach }}</span>
+                    </div>
+                @endif
+
+                <!-- Captain -->
+                @if($game->awayTeam->captain)
+                    <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
+                                <span class="text-sm">⭐</span>
+                            </div>
+                            <span class="text-sm font-bold text-gray-400">Captain</span>
+                        </div>
+                        <span class="text-sm font-bold text-white">{{ $game->awayTeam->captain }}</span>
+                    </div>
+                @endif
+
+                <!-- World Cup History -->
+                <div class="pt-4 border-t border-white/10">
+                    <div class="text-xs font-black text-gray-500 uppercase tracking-widest mb-3">World Cup History</div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="text-center p-3 rounded-lg bg-gradient-to-br from-[#ffc300]/10 to-transparent border border-[#ffc300]/20">
+                            <div class="text-2xl font-black text-[#ffc300]">{{ $game->awayTeam->world_cup_titles ?? 0 }}</div>
+                            <div class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mt-1">Titles</div>
+                        </div>
+                        <div class="text-center p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div class="text-2xl font-black text-white">{{ $game->awayTeam->world_cup_appearances ?? 0 }}</div>
+                            <div class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mt-1">Appearances</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Prediction Card -->
     @if($game->status === 'scheduled')
         <div class="glass-card p-6 mb-6 {{ $canPredict ? 'glow-cyan' : '' }}">
@@ -106,6 +259,52 @@
                     <p class="text-sm text-red-500/70 mt-1">Deadline: 1 hour before kickoff</p>
                 </div>
             @else
+                <!-- AI Prediction Suggestion -->
+                @if($aiPrediction)
+                    <div class="mb-6 p-5 rounded-xl bg-gradient-to-r from-[#3a86ff]/10 to-[#00f5d4]/10 border border-[#00f5d4]/30 relative overflow-hidden">
+                        <!-- Glow effect -->
+                        <div class="absolute inset-0 bg-gradient-to-r from-[#3a86ff]/5 to-[#00f5d4]/5 blur-xl"></div>
+                        
+                        <div class="relative z-10">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#3a86ff] to-[#00f5d4] flex items-center justify-center shadow-lg">
+                                    <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="text-sm font-black text-white uppercase tracking-widest">AI Prediction</h4>
+                                    <p class="text-xs text-gray-500">Based on FIFA ranking, WC history & more</p>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-xs font-bold text-gray-500 uppercase tracking-wider">Confidence</div>
+                                    <div class="text-lg font-black text-[#00f5d4]">{{ $aiPrediction->confidence_percentage }}%</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-center gap-8 mb-4">
+                                <div class="text-center">
+                                    <div class="text-4xl font-black text-white mb-1">{{ $aiPrediction->predicted_home_score }}</div>
+                                    <div class="text-xs text-gray-500 font-bold">{{ $game->homeTeam->display_name }}</div>
+                                </div>
+                                <div class="text-2xl font-bold text-gray-600">-</div>
+                                <div class="text-center">
+                                    <div class="text-4xl font-black text-white mb-1">{{ $aiPrediction->predicted_away_score }}</div>
+                                    <div class="text-xs text-gray-500 font-bold">{{ $game->awayTeam->display_name }}</div>
+                                </div>
+                            </div>
+                            
+                            <button 
+                                x-data 
+                                @click="$wire.homeScore = {{ $aiPrediction->predicted_home_score }}; $wire.awayScore = {{ $aiPrediction->predicted_away_score }}"
+                                class="w-full py-2.5 text-sm font-bold text-[#00f5d4] hover:bg-[#00f5d4]/10 rounded-lg transition-all border border-[#00f5d4]/20 hover:border-[#00f5d4]/40"
+                            >
+                                ✨ Use AI Prediction
+                            </button>
+                        </div>
+                    </div>
+                @endif
+
                 <div x-data="{ 
                     homeScore: @entangle('homeScore'), 
                     awayScore: @entangle('awayScore'),
@@ -119,7 +318,9 @@
                         <div class="flex items-center justify-center gap-12">
                             <!-- Home Team Input -->
                             <div class="text-center">
-                                <img src="{{ $game->homeTeam->flag_url }}" class="w-16 h-16 mx-auto rounded-full shadow-lg mb-4 ring-2 ring-white/10">
+                                <div class="w-20 h-14 mx-auto rounded-lg overflow-hidden shadow-lg mb-4 ring-2 ring-white/10 bg-white/5">
+                                    <img src="{{ $game->homeTeam->flag_url }}" class="w-full h-full object-cover">
+                                </div>
                                 <div class="flex items-center gap-4">
                                     <button @click="if(homeScore > 0) homeScore--" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-white transition">
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg>
@@ -136,7 +337,9 @@
 
                             <!-- Away Team Input -->
                             <div class="text-center">
-                                <img src="{{ $game->awayTeam->flag_url }}" class="w-16 h-16 mx-auto rounded-full shadow-lg mb-4 ring-2 ring-white/10">
+                                <div class="w-20 h-14 mx-auto rounded-lg overflow-hidden shadow-lg mb-4 ring-2 ring-white/10 bg-white/5">
+                                    <img src="{{ $game->awayTeam->flag_url }}" class="w-full h-full object-cover">
+                                </div>
                                 <div class="flex items-center gap-4">
                                     <button @click="if(awayScore > 0) awayScore--" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-white transition">
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg>

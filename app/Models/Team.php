@@ -18,6 +18,11 @@ class Team extends Model
         'colors',
         'confederation',
         'fifa_ranking',
+        'coach',
+        'captain',
+        'world_cup_titles',
+        'world_cup_appearances',
+        'team_stats',
         'is_placeholder',
         'placeholder_label',
     ];
@@ -25,6 +30,7 @@ class Team extends Model
     protected $casts = [
         'name' => 'array',
         'colors' => 'array',
+        'team_stats' => 'array',
         'is_placeholder' => 'boolean',
     ];
 

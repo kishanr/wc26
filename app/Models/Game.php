@@ -97,6 +97,11 @@ class Game extends Model
         return $this->hasMany(MiniPrediction::class, 'match_id');
     }
 
+    public function aiPrediction()
+    {
+        return $this->hasOne(\App\Models\AiPrediction::class, 'game_id');
+    }
+
     /**
      * Check if game is live
      */

@@ -20,6 +20,7 @@ class MatchDetail extends Component
     public $aiConfidence = 65;
     public $communitySentiment = 40;
     public ?Prediction $userPrediction = null;
+    public $aiPrediction = null;
     public bool $isLocked = false;
     public bool $canPredict = true;
     public string $message = '';
@@ -29,7 +30,10 @@ class MatchDetail extends Component
     public function mount(Game $game)
     {
         $this->game = $game;
-        $this->game->load(['homeTeam', 'awayTeam', 'stadium']);
+        $this->game->load(['homeTeam', 'awayTeam', 'stadium', 'aiPrediction']);
+
+        // Load AI Prediction
+        $this->aiPrediction = $game->aiPrediction;
 
         // Load Related Matches
         $query = Game::where('id', '!=', $this->game->id)
